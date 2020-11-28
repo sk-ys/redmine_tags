@@ -5,12 +5,8 @@ module RedmineTags
         base.extend(ClassMethods)
         base.class_eval do
           class << self
-            if Rails::VERSION::MAJOR >= 5
-              alias_method :call_without_redmine_tags, :call
-              alias_method :call, :call_with_redmine_tags
-            else
-              alias_method_chain :call, :redmine_tags
-            end
+            alias_method :call_without_redmine_tags, :call
+            alias_method :call, :call_with_redmine_tags
           end
         end
       end
