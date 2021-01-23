@@ -16,7 +16,8 @@ bases = [
   CalendarsController,
   GanttsController,
   SettingsController,
-  ReportsController
+  ReportsController,
+  AutoCompletesController
 ]
 patch = RedmineTags::Patches::AddHelpersForIssueTagsPatch
 bases.each do |base|

@@ -72,20 +72,7 @@ module TagsHelper
       # prevent ActsAsTaggableOn::TagsHelper from calling `all`
       # otherwise we will need sort tags after `tag_cloud`
       tags = tags.to_a
-      case sorting = "#{ RedmineTags.settings[:issues_sort_by] }:#{ RedmineTags.settings[:issues_sort_order] }"
-        when 'name:asc'
-          tags.sort! {|a, b| a.name <=> b.name }
-        when 'name:desc'
-          tags.sort! {|a, b| b.name <=> a.name }
-        when 'count:asc'
-          tags.sort! {|a, b| a.count <=> b.count }
-        when 'count:desc'
-          tags.sort! {|a, b| b.count <=> a.count }
-        else
-          # Unknown sorting option. Fallback to default one
-          logger.warn "[redmine_tags] Unknown sorting option: <#{ sorting }>"
-          tags.sort! {|a, b| a.name <=> b.name }
-      end
+      tags = sort_tags_array(tags)
       if :list == style
         list_el, item_el = 'ul', 'li'
       elsif :simple_cloud == style
@@ -115,6 +102,23 @@ module TagsHelper
         api.tag(:id => tag.id, :name => tag.name)
       end
     end if include_in_api_response?('tags')
+  end
+
+  def sort_tags_array(tags)
+    case sorting = "#{ RedmineTags.settings[:issues_sort_by] }:#{ RedmineTags.settings[:issues_sort_order] }"
+      when 'name:asc'
+        tags.sort! {|a, b| a.name <=> b.name }
+      when 'name:desc'
+        tags.sort! {|a, b| b.name <=> a.name }
+      when 'count:asc'
+        tags.sort! {|a, b| a.count <=> b.count }
+      when 'count:desc'
+        tags.sort! {|a, b| b.count <=> a.count }
+      else
+        # Unknown sorting option. Fallback to default one
+        logger.warn "[redmine_tags] Unknown sorting option: <#{ sorting }>"
+        tags.sort! {|a, b| a.name <=> b.name }
+    end
   end
 
   private
