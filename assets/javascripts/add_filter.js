@@ -1,4 +1,8 @@
 $(function () {
+    if ($('#filters').length !== 1) {
+        return;
+    }
+
     var update_option = function () {
         if ($('#operators_tags').length && !$('#operators_tags option[value="and"]').length) {
             var option_equals = $('#operators_tags option[value="="]');
@@ -8,19 +12,21 @@ $(function () {
     }
 
     var observer_rsize_filter =
-            new MutationObserver(function (mutations) {
-                update_option();
-            });
+        new MutationObserver(function (mutations) {
+            update_option();
+        });
     observer_rsize_filter.observe(
         $('#filters')[0], {
-            childList : true,
+            childList: true,
             subtree: true
         });
 
     // initial invoke
     update_option();
 
-    if (location.search.indexOf(encodeURI('op[tags]=and'))>0) {
-        setTimeout(function () {$('#operators_tags').val('and');});
+    if (location.search.indexOf(encodeURI('op[tags]=and')) > 0) {
+        setTimeout(function () {
+            $('#operators_tags').val('and');
+        });
     }
 });
